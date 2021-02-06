@@ -51,7 +51,7 @@
 deps_info = {
   'Mix_LoadWAV_RW': ['fileno'],
   'SDL_CreateRGBSurface': ['malloc', 'free'],
-  'SDL_GL_GetProcAddress': ['emscripten_GetProcAddress'],
+  'SDL_GL_GetProcAddress': ['malloc', 'emscripten_GetProcAddress'],
   'SDL_Init': ['malloc', 'free', 'memset', 'memcpy'],
   'SDL_LockSurface': ['malloc', 'free'],
   'SDL_OpenAudio': ['malloc', 'free'],
