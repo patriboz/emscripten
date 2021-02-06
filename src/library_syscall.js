@@ -544,10 +544,10 @@ var SyscallsLibrary = {
     return socket;
   },
   /** @param {boolean=} allowNull */
-  $getSocketAddress__deps: ['_read_sockaddr'],
+  $getSocketAddress__deps: ['$readSockaddr'],
   $getSocketAddress: function(addrp, addrlen, allowNull) {
     if (allowNull && addrp === 0) return null;
-    var info = __read_sockaddr(addrp, addrlen);
+    var info = readSockaddr(addrp, addrlen);
     if (info.errno) throw new FS.ErrnoError(info.errno);
     info.addr = DNS.lookup_addr(info.addr) || info.addr;
 #if SYSCALL_DEBUG
@@ -673,7 +673,7 @@ var SyscallsLibrary = {
     }
     return -{{{ cDefine('ENOPROTOOPT') }}}; // The option is unknown at the level indicated.
   },
-  __sys_sendmsg__deps: ['$getSocketFromFD', '_read_sockaddr', '$DNS'],
+  __sys_sendmsg__deps: ['$getSocketFromFD', '$readSockaddr', '$DNS'],
   __sys_sendmsg: function(fd, message, flags) {
     var sock = getSocketFromFD(fd);
     var iov = {{{ makeGetValue('message', C_STRUCTS.msghdr.msg_iov, '*') }}};
@@ -683,7 +683,7 @@ var SyscallsLibrary = {
     var name = {{{ makeGetValue('message', C_STRUCTS.msghdr.msg_name, '*') }}};
     var namelen = {{{ makeGetValue('message', C_STRUCTS.msghdr.msg_namelen, 'i32') }}};
     if (name) {
-      var info = __read_sockaddr(name, namelen);
+      var info = readSockaddr(name, namelen);
       if (info.errno) return -info.errno;
       port = info.port;
       addr = DNS.lookup_addr(info.addr) || info.addr;
